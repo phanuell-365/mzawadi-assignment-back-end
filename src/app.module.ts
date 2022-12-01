@@ -7,6 +7,10 @@ import { DatabaseModule } from './database/database.module';
 import { DistributorsModule } from './distributors/distributors.module';
 import { ConsumersModule } from './consumers/consumers.module';
 import { ProductsModule } from './products/products.module';
+import { TargetsModule } from './targets/targets.module';
+import { RewardsModule } from './rewards/rewards.module';
+import { PointsModule } from './points/points.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -16,6 +20,10 @@ import { ProductsModule } from './products/products.module';
     DistributorsModule,
     ConsumersModule,
     ProductsModule,
+    TargetsModule,
+    RewardsModule,
+    PointsModule,
+    SalesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
