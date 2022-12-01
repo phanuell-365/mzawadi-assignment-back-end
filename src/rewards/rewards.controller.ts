@@ -1,6 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { RewardsService } from './rewards.service';
-import { UpdateRewardDto } from './dto/update-reward.dto';
 
 @Controller('rewards')
 export class RewardsController {
@@ -18,16 +17,16 @@ export class RewardsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.rewardsService.findOne(+id);
+    return this.rewardsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRewardDto: UpdateRewardDto) {
-    return this.rewardsService.update(+id, updateRewardDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateRewardDto: UpdateRewardDto) {
+  //   return this.rewardsService.update(id, updateRewardDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.rewardsService.remove(+id);
+    return this.rewardsService.remove(id);
   }
 }

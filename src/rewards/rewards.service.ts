@@ -1,11 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateRewardDto, UpdateRewardDto } from './dto';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateRewardDto } from './dto';
 import { SALES_REPOSITORY } from '../sales/const';
 import { Sale } from '../sales/entities';
-import { REWARDS_REPOSITORY } from './const';
+import { REBATE_PERCENT, REWARD_NOT_FOUND, REWARDS_REPOSITORY } from './const';
 import { Reward } from './entities';
-import { TARGETS_REPOSITORY } from '../targets/const';
+import { TARGET_NOT_FOUND, TARGETS_REPOSITORY } from '../targets/const';
 import { Target } from '../targets/entities';
+import { Op } from 'sequelize';
+import { DISTRIBUTORS_REPOSITORY } from '../distributors/const';
+import { Distributor } from '../distributors/entities';
 
 @Injectable()
 export class RewardsService {
@@ -15,11 +18,13 @@ export class RewardsService {
     private readonly rewardsRepository: typeof Reward,
     @Inject(TARGETS_REPOSITORY)
     private readonly targetsRepository: typeof Target,
+    @Inject(DISTRIBUTORS_REPOSITORY)
+    private readonly distributorsRepository: typeof Distributor,
   ) {}
 
   async getReward(options: {
     rewardId?: string;
-    distributorAndProductId: {
+    distributorAndProductId?: {
       DistributorId: string;
       ProductId: string;
     };
@@ -36,11 +41,19 @@ export class RewardsService {
   }
 
   async countSalesByDistributorForProductY(distributorId: string, productId) {
+    const TODAY_START = new Date().setHours(0, 0, 0, 0);
+
+    const NOW = new Date();
+
     const { rows: sales, count: numOfSales } =
       await this.salesRepository.findAndCountAll({
         where: {
           DistributorId: distributorId,
           ProductId: productId,
+          soldAt: {
+            [Op.gt]: TODAY_START,
+            [Op.lt]: NOW,
+          },
         },
       });
 
@@ -58,18 +71,46 @@ export class RewardsService {
       },
     });
 
+    // if no target was found, throw a not found exception
+    if (!target) throw new NotFoundException(TARGET_NOT_FOUND);
+
     return +target.salesTarget;
   }
 
-  //
-  // async getCurrentNumberOfSales() {}
-  //
-  // async isTargetReached() {}
+  async getSalesTotalAmounts(sales: Sale[]) {
+    return sales.map((value) => value.totalAmount);
+  }
+
+  async calculateTodayTotal(salesTotalAmounts: number[]) {
+    return salesTotalAmounts.reduce(
+      (previousValue, currentValue) => previousValue + currentValue,
+    );
+  }
+
+  async calculateRebateAmount(salesTarget: number) {
+    const rebate = REBATE_PERCENT / 100;
+
+    return +salesTarget * rebate;
+  }
+
+  async updateDistributorRebateAmount(
+    rebateAmount: number,
+    distributorId: string,
+  ) {
+    const distributor = await this.distributorsRepository.findByPk(
+      distributorId,
+    );
+
+    distributor.rebateAmount += +rebateAmount;
+
+    return await distributor.save();
+  }
 
   async rewardDistributor(sale: Sale) {
     const distributorId = sale.DistributorId;
     const productId = sale.ProductId;
 
+    // get the sales from 12 am till now
     const { sales } = await this.countSalesByDistributorForProductY(
       distributorId,
       productId,
@@ -85,25 +126,52 @@ export class RewardsService {
       sale.DistributorId,
       sale.ProductId,
     );
+
+    const totalAmounts = await this.getSalesTotalAmounts(sales);
+
+    const todayTotal = await this.calculateTodayTotal(totalAmounts);
+
+    const rebateAmount = await this.calculateRebateAmount(salesTarget);
+
+    await this.updateDistributorRebateAmount(rebateAmount, distributorId);
+
+    // check if today'sTotal is greater than or equal to the salesTarget
+    if (todayTotal >= salesTarget) {
+      // if true, we issue the reward
+      return await this.createReward({
+        rebateAmount,
+        salesTarget,
+        DistributionId: distributorId,
+        ProductId: productId,
+      });
+    }
+    // if the sales target is not yet reached, return
+    else return;
   }
 
-  createReward(createRewardDto: CreateRewardDto) {
-    const distributionId = createRewardDto.DistributionId;
+  async createReward(createRewardDto: CreateRewardDto) {
+    return await this.rewardsRepository.create({
+      ...createRewardDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all rewards`;
+  async findAll() {
+    return await this.rewardsRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} reward`;
+  async findOne(rewardId: string) {
+    const reward = await this.getReward({ rewardId });
+
+    if (!reward) throw new NotFoundException(REWARD_NOT_FOUND);
+
+    return reward;
   }
 
-  update(id: number, updateRewardDto: UpdateRewardDto) {
-    return `This action updates a #${id} reward`;
-  }
+  // update(id: number, updateRewardDto: UpdateRewardDto) {
+  //   return `This action updates a #${id} reward`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} reward`;
+  async remove(rewardId: string) {
+    return await this.findOne(rewardId);
   }
 }

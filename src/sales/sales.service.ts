@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSaleDto, UpdateSaleDto } from './dto';
 import { SALE_NOT_FOUND, SALES_REPOSITORY } from './const';
 import { Sale } from './entities';
@@ -69,23 +64,14 @@ export class SalesService {
       throw new NotFoundException(CONSUMER_NOT_FOUND);
     }
 
-    const productPrice = product.price;
+    const productPrice = +product.price;
 
-    // if the transaction amount is provided
-    if (createSaleDto.transactionAmount) {
-      // it should be equal to the price of the product
-      // if not, throw an error
-      if (createSaleDto.transactionAmount !== productPrice) {
-        throw new ConflictException(
-          'The transaction amount is not equal to the product price!',
-        );
-      }
-    } else {
-      createSaleDto.transactionAmount = productPrice;
-    }
+    // calculate the total amount
+    createSaleDto.totalAmount = +createSaleDto.quantitySold * +productPrice;
 
+    // create the new sale
     const sale = await this.salesRepository.create({
-      ...createSaleD,
+      ...createSaleDto,
     });
 
     // reward the distributor
@@ -171,23 +157,6 @@ export class SalesService {
 
       // update the sale
       sale.ConsumerId = updateSaleDto.ConsumerId;
-    }
-
-    // update the other fields first to avoid anomalies on the value of sales sale field
-    await sale.save();
-
-    // if the transaction amount is being updated
-    if (updateSaleDto.transactionAmount) {
-      const productPrice = soldProduct.price;
-      // it should be equal to the price of the product
-      // if not, throw an error
-      if (updateSaleDto.transactionAmount !== productPrice) {
-        throw new ConflictException(
-          'The transaction amount is not equal to the product price!',
-        );
-      } else {
-        sale.transactionAmount = updateSaleDto.transactionAmount;
-      }
     }
 
     return await sale.save();

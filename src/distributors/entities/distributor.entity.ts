@@ -43,5 +43,5 @@ export class Distributor extends Model {
     type: DataType.INTEGER,
     defaultValue: 0,
   })
-  rewardAmount: number;
+  rebateAmount: number;
 }

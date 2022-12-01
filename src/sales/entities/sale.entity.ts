@@ -1,6 +1,7 @@
 import {
   BelongsTo,
   Column,
+  CreatedAt,
   DataType,
   ForeignKey,
   Model,
@@ -41,6 +42,9 @@ export class Sale extends Model {
     defaultValue: 0,
   })
   totalAmount: number;
+
+  @CreatedAt
+  soldAt: Date;
 
   @ForeignKey(() => Consumer)
   @Column({

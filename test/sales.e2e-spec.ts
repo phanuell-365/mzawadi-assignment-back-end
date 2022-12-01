@@ -7,6 +7,7 @@ import { CreateProductDto } from '../src/products/dto';
 import { CreateDistributorDto } from '../src/distributors/dto';
 import { CreateSaleDto, UpdateSaleDto } from '../src/sales/dto';
 import { CreateConsumerDto } from '../src/consumers/dto';
+import { CreateTargetDto } from '../src/targets/dto';
 
 describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
   let saleApp: INestApplication;
@@ -166,16 +167,35 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
     });
   });
 
+  describe('Targets Module', function () {
+    const createTargetDto: CreateTargetDto = {
+      DistributorId: '$S{distributorOneId}',
+      ProductId: '$S{productOneId}',
+      salesTarget: 2,
+    };
+
+    describe('Create a new Target', function () {
+      it('should return a new target', function () {
+        return pactum
+          .spec()
+          .post('/targets')
+          .withBody({ ...createTargetDto })
+          .inspect()
+          .stores('targetOneId', 'id')
+          .expectStatus(201);
+      });
+    });
+
+    describe('Get all targets', function () {
+      it('should return all the available targets', function () {
+        return pactum.spec().get('/targets').inspect().expectStatus(200);
+      });
+    });
+  });
+
   let saleOneId: string;
 
   describe('Sales Module', function () {
-    // const createSaleDto: CreateSaleDto = {
-    //   DistributorId: distributorOneId,
-    //   ProductId: productOneId,
-    //   // valueOfSalesSale: 0,
-    //   salesSale: 2,
-    // };
-
     const createSaleDto: CreateSaleDto = {
       ConsumerId: '$S{consumerOneId}',
       DistributorId: '$S{distributorOneId}',

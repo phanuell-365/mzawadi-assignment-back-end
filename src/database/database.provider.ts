@@ -9,6 +9,7 @@ import { Distributor } from '../distributors/entities';
 import { Product } from '../products/entities';
 import { Target } from '../targets/entities';
 import { Sale } from '../sales/entities';
+import { Reward } from '../rewards/entities';
 
 export const databaseProvider = [
   {
@@ -31,7 +32,15 @@ export const databaseProvider = [
 
       const sequelize = new Sequelize(config);
 
-      sequelize.addModels([User, Consumer, Distributor, Product, Target, Sale]);
+      sequelize.addModels([
+        User,
+        Consumer,
+        Distributor,
+        Product,
+        Target,
+        Sale,
+        Reward,
+      ]);
 
       try {
         switch (process.env.NODE_ENV) {
