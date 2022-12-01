@@ -8,8 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { DistributorsService } from './distributors.service';
-import { CreateDistributorDto } from './dto/create-distributor.dto';
-import { UpdateDistributorDto } from './dto/update-distributor.dto';
+import { CreateDistributorDto, UpdateDistributorDto } from './dto';
 
 @Controller('distributors')
 export class DistributorsController {
@@ -27,7 +26,7 @@ export class DistributorsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.distributorsService.findOne(+id);
+    return this.distributorsService.findOne(id);
   }
 
   @Patch(':id')
@@ -35,11 +34,11 @@ export class DistributorsController {
     @Param('id') id: string,
     @Body() updateDistributorDto: UpdateDistributorDto,
   ) {
-    return this.distributorsService.update(+id, updateDistributorDto);
+    return this.distributorsService.update(id, updateDistributorDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.distributorsService.remove(+id);
+    return this.distributorsService.remove(id);
   }
 }

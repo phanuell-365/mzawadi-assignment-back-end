@@ -5,6 +5,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { InternalServerErrorException } from '@nestjs/common';
 import { User } from '../users/entities';
 import { Consumer } from '../consumers/entities';
+import { Distributor } from '../distributors/entities';
 
 export const databaseProvider = [
   {
@@ -27,7 +28,7 @@ export const databaseProvider = [
 
       const sequelize = new Sequelize(config);
 
-      sequelize.addModels([User, Consumer]);
+      sequelize.addModels([User, Consumer, Distributor]);
 
       try {
         switch (process.env.NODE_ENV) {
