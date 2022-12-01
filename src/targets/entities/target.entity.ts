@@ -34,13 +34,6 @@ export class Target extends Model {
   })
   salesTarget: number;
 
-  @Column({
-    allowNull: false,
-    type: DataType.INTEGER,
-    defaultValue: 0,
-  })
-  valueOfSalesTarget: number;
-
   // a distributor has target for a certain product's sale
   @ForeignKey(() => Distributor)
   DistributorId: string;

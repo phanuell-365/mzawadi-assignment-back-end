@@ -8,10 +8,6 @@ export class UpdateTargetDto extends PartialType(CreateTargetDto) {
   salesTarget?: number;
 
   @IsOptional()
-  @IsNumber()
-  valueOfSalesTarget?: number;
-
-  @IsOptional()
   @IsUUID()
   DistributorId?: string;
 

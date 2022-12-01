@@ -1,13 +1,9 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
 
 export class CreateTargetDto {
   @IsNotEmpty()
   @IsNumber()
   salesTarget: number;
-
-  @IsOptional()
-  @IsNumber()
-  valueOfSalesTarget?: number;
 
   @IsNotEmpty()
   @IsUUID()

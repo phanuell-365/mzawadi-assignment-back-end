@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTargetDto, UpdateTargetDto } from './dto';
 import { TARGET_NOT_FOUND, TARGETS_REPOSITORY } from './const';
 import { Target } from './entities';
@@ -35,19 +30,6 @@ export class TargetsService {
     return target;
   }
 
-  async calculateValueOfSalesTarget(productId: string, salesTarget: number) {
-    // get the product by the given product id
-    const product = await this.productsService.getProduct({ productId });
-
-    // if not product was found, return the control back to the function caller
-    // this is a near miss
-    if (!product) return;
-
-    const price = +product.price;
-
-    return salesTarget * price;
-  }
-
   // services for the targetsController
 
   async create(createTargetDto: CreateTargetDto) {
@@ -69,24 +51,6 @@ export class TargetsService {
     // if the product is not found, throw new NotFoundException exception.
     if (!product) {
       throw new NotFoundException(PRODUCT_NOT_FOUND);
-    }
-
-    // calculate the value of the sales target
-    const valueOfSalesTarget = await this.calculateValueOfSalesTarget(
-      createTargetDto.ProductId,
-      createTargetDto.salesTarget,
-    );
-
-    // if the value of the sales target is given
-    if (createTargetDto.valueOfSalesTarget) {
-      // check if the value is correct, if not throw a conflict exception.
-      if (createTargetDto.valueOfSalesTarget !== valueOfSalesTarget) {
-        throw new ConflictException(
-          'The value of sales target is not equal to exact sales target.',
-        );
-      }
-    } else {
-      createTargetDto.valueOfSalesTarget = valueOfSalesTarget;
     }
 
     // else create the new target and return it
@@ -154,35 +118,6 @@ export class TargetsService {
     // update the sales target if it is in the updateTarget dto
     if (updateTargetDto.salesTarget) {
       target.salesTarget = updateTargetDto.salesTarget;
-    }
-
-    // update the other fields first to avoid anomalies on the value of sales target field
-    await target.save();
-
-    // update the value of the sales target if given
-    if (updateTargetDto.valueOfSalesTarget) {
-      // calculate the value of the sales target
-      const valueOfSalesTarget = await this.calculateValueOfSalesTarget(
-        // give the product id in the update target dto if it is given
-        // else give the product id in the target
-        target.ProductId,
-        updateTargetDto.salesTarget,
-      );
-
-      // check if the value is correct, if not throw a conflict exception.
-      if (updateTargetDto.valueOfSalesTarget !== valueOfSalesTarget) {
-        throw new ConflictException(
-          'The value of sales target is not equal to exact sales target.',
-        );
-      } else {
-        // else update the value of the sales target
-        target.valueOfSalesTarget = updateTargetDto.valueOfSalesTarget;
-      }
-    } else {
-      target.valueOfSalesTarget = await this.calculateValueOfSalesTarget(
-        target.ProductId,
-        target.salesTarget,
-      );
     }
 
     return await target.save();
