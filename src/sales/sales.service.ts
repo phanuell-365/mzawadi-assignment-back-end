@@ -10,6 +10,7 @@ import { ConsumersService } from '../consumers/consumers.service';
 import { CONSUMER_NOT_FOUND } from '../consumers/const';
 import { Product } from '../products/entities';
 import { RewardsService } from '../rewards/rewards.service';
+import { PointsService } from '../points/points.service';
 
 @Injectable()
 export class SalesService {
@@ -19,6 +20,7 @@ export class SalesService {
     private readonly productsService: ProductsService,
     private readonly consumersService: ConsumersService,
     private readonly rewardsService: RewardsService,
+    private readonly pointsService: PointsService,
   ) {}
 
   async getSale(options: { saleId?: string }) {
@@ -76,6 +78,9 @@ export class SalesService {
 
     // reward the distributor
     await this.rewardsService.rewardDistributor(sale);
+
+    // extend points to consumer
+    await this.pointsService.extendPointsToConsumer(sale);
 
     return sale;
   }

@@ -10,6 +10,7 @@ import { Product } from '../products/entities';
 import { Target } from '../targets/entities';
 import { Sale } from '../sales/entities';
 import { Reward } from '../rewards/entities';
+import { Point } from '../points/entities';
 
 export const databaseProvider = [
   {
@@ -40,6 +41,7 @@ export const databaseProvider = [
         Target,
         Sale,
         Reward,
+        Point,
       ]);
 
       try {

@@ -15,9 +15,18 @@ import { RewardsModule } from '../rewards/rewards.module';
 import { RewardsService } from '../rewards/rewards.service';
 import { rewardsProvider } from '../rewards/rewards.provider';
 import { targetProvider } from '../targets/targets.provider';
+import { pointsProvider } from '../points/points.provider';
+import { PointsService } from '../points/points.service';
+import { PointsModule } from '../points/points.module';
 
 @Module({
-  imports: [ProductsModule, DistributorsModule, ConsumersModule, RewardsModule],
+  imports: [
+    ProductsModule,
+    DistributorsModule,
+    ConsumersModule,
+    RewardsModule,
+    PointsModule,
+  ],
   controllers: [SalesController],
   providers: [
     SalesService,
@@ -25,12 +34,14 @@ import { targetProvider } from '../targets/targets.provider';
     ConsumersService,
     ProductsService,
     RewardsService,
+    PointsService,
     ...salesProvider,
     ...distributorsProvider,
     ...productsProvider,
     ...consumersProvider,
     ...rewardsProvider,
     ...targetProvider,
+    ...pointsProvider,
   ],
 })
 export class SalesModule {}

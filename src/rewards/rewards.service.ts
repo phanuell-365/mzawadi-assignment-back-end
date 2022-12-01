@@ -150,7 +150,6 @@ export class RewardsService {
   }
 
   async createReward(createRewardDto: CreateRewardDto) {
-    console.error({ ...createRewardDto });
     return await this.rewardsRepository.create({
       ...createRewardDto,
     });
