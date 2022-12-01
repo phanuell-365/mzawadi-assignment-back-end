@@ -6,24 +6,18 @@ export class UpdateRewardDto extends PartialType(CreateRewardDto) {
   @IsOptional()
   @IsNumber()
   @IsPositive()
-  rebateRate?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @IsPositive()
   rebateAmount?: number;
 
   @IsOptional()
   @IsNumber()
   @IsPositive()
-  numOfSalesOnRebate?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @IsPositive()
-  numOfSalesBeforeNextRebate?: number;
+  salesTarget?: number;
 
   @IsOptional()
   @IsUUID()
   DistributionId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  ProductId?: string;
 }

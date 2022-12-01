@@ -4,24 +4,18 @@ export class CreateRewardDto {
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
-  rebateRate: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
   rebateAmount: number;
 
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
-  numOfSalesOnRebate: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  numOfSalesBeforeNextRebate: number;
+  salesTarget: number;
 
   @IsNotEmpty()
   @IsUUID()
   DistributionId: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  ProductId: string;
 }
