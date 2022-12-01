@@ -37,4 +37,11 @@ export class Distributor extends Model {
     type: DataType.STRING,
   })
   phone: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.INTEGER,
+    defaultValue: 0,
+  })
+  rewardAmount: number;
 }

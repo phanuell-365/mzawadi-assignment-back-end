@@ -1,6 +1,9 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
   IsString,
   MaxLength,
   MinLength,
@@ -20,4 +23,9 @@ export class CreateDistributorDto {
   @MinLength(10)
   @MaxLength(10)
   phone: string;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  rewardAmount?: number;
 }
