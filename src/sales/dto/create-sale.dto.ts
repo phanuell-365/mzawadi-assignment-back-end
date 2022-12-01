@@ -10,7 +10,12 @@ export class CreateSaleDto {
   @IsOptional()
   @IsNumber()
   @IsPositive()
-  transactionAmount?: number;
+  quantitySold?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  totalAmount?: number;
 
   @IsNotEmpty()
   @IsUUID()

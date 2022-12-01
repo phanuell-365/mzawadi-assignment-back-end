@@ -33,7 +33,14 @@ export class Sale extends Model {
     type: DataType.INTEGER,
     defaultValue: 0,
   })
-  transactionAmount: number;
+  quantitySold: number;
+
+  @Column({
+    allowNull: false,
+    type: DataType.INTEGER,
+    defaultValue: 0,
+  })
+  totalAmount: number;
 
   @ForeignKey(() => Consumer)
   @Column({

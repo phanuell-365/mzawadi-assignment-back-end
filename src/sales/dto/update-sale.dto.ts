@@ -6,7 +6,12 @@ export class UpdateSaleDto extends PartialType(CreateSaleDto) {
   @IsOptional()
   @IsNumber()
   @IsPositive()
-  transactionAmount?: number;
+  quantitySold?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  totalAmount?: number;
 
   @IsOptional()
   @IsUUID()
