@@ -31,18 +31,4 @@ export class Product extends Model {
     defaultValue: 0,
   })
   price: number;
-
-  @Column({
-    allowNull: false,
-    type: DataType.INTEGER,
-    defaultValue: 0,
-  })
-  quantitySold: number;
-
-  @Column({
-    allowNull: false,
-    type: DataType.INTEGER,
-    defaultValue: 0,
-  })
-  totalAmount: number;
 }

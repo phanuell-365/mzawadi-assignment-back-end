@@ -13,7 +13,7 @@ export class CreateRewardDto {
 
   @IsNotEmpty()
   @IsUUID()
-  DistributionId: string;
+  DistributorId: string;
 
   @IsNotEmpty()
   @IsUUID()

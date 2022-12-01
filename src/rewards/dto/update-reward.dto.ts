@@ -15,7 +15,7 @@ export class UpdateRewardDto extends PartialType(CreateRewardDto) {
 
   @IsOptional()
   @IsUUID()
-  DistributionId?: string;
+  DistributorId?: string;
 
   @IsOptional()
   @IsUUID()

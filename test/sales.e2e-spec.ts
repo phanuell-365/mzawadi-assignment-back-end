@@ -171,7 +171,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
     const createTargetDto: CreateTargetDto = {
       DistributorId: '$S{distributorOneId}',
       ProductId: '$S{productOneId}',
-      salesTarget: 2,
+      salesTarget: 200,
     };
 
     describe('Create a new Target', function () {
@@ -197,11 +197,10 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
 
   describe('Sales Module', function () {
     const createSaleDto: CreateSaleDto = {
+      quantitySold: 10,
       ConsumerId: '$S{consumerOneId}',
       DistributorId: '$S{distributorOneId}',
       ProductId: '$S{productOneId}',
-      // valueOfSalesSale: 0,
-      // salesSale: 2,
     };
 
     describe('Create a new Sale', function () {
@@ -250,6 +249,51 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .withPathParams({ id: saleOneId })
           .inspect()
           .expectStatus(200);
+      });
+    });
+
+    describe('Get all sales', function () {
+      it('should return all the available sales', function () {
+        return pactum.spec().get('/sales').inspect().expectStatus(200);
+      });
+    });
+
+    describe('Targets Module', function () {
+      const createTargetDto: CreateTargetDto = {
+        DistributorId: '$S{distributorOneId}',
+        ProductId: '$S{productTwoId}',
+        salesTarget: 100,
+      };
+
+      describe('Create a new Target', function () {
+        it('should return a new target', function () {
+          return pactum
+            .spec()
+            .post('/targets')
+            .withBody({ ...createTargetDto })
+            .inspect()
+            .stores('targetOneId', 'id')
+            .expectStatus(201);
+        });
+      });
+    });
+
+    describe('Make another sale', function () {
+      it('should return a new sale', function () {
+        const anotherSaleDto: CreateSaleDto = {
+          quantitySold: 10,
+          ConsumerId: '$S{consumerOneId}',
+          DistributorId: '$S{distributorOneId}',
+          ProductId: '$S{productTwoId}',
+        };
+
+        return pactum
+          .spec()
+          .post('/sales')
+          .withBody({ ...anotherSaleDto })
+          .inspect()
+          .stores('saleOneId', 'id')
+          .expectStatus(201);
       });
     });
 

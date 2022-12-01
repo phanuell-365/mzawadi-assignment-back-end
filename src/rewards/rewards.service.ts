@@ -141,7 +141,7 @@ export class RewardsService {
       return await this.createReward({
         rebateAmount,
         salesTarget,
-        DistributionId: distributorId,
+        DistributorId: distributorId,
         ProductId: productId,
       });
     }
@@ -150,6 +150,7 @@ export class RewardsService {
   }
 
   async createReward(createRewardDto: CreateRewardDto) {
+    console.error({ ...createRewardDto });
     return await this.rewardsRepository.create({
       ...createRewardDto,
     });

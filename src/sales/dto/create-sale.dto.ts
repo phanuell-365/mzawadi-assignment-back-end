@@ -7,10 +7,10 @@ import {
 } from 'class-validator';
 
 export class CreateSaleDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   @IsPositive()
-  quantitySold?: number;
+  quantitySold: number;
 
   @IsOptional()
   @IsNumber()
