@@ -1,0 +1,1 @@
+export const TARGET_NOT_FOUND = 'TARGET_NOT_FOUND!';

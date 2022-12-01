@@ -7,6 +7,7 @@ import { User } from '../users/entities';
 import { Consumer } from '../consumers/entities';
 import { Distributor } from '../distributors/entities';
 import { Product } from '../products/entities';
+import { Target } from '../targets/entities';
 
 export const databaseProvider = [
   {
@@ -29,7 +30,7 @@ export const databaseProvider = [
 
       const sequelize = new Sequelize(config);
 
-      sequelize.addModels([User, Consumer, Distributor, Product]);
+      sequelize.addModels([User, Consumer, Distributor, Product, Target]);
 
       try {
         switch (process.env.NODE_ENV) {
