@@ -116,7 +116,7 @@ export class TargetsService {
 
     // check if the target with the given id exists
     if (!target) {
-      // else throw a not found exception, the target does not exist
+      // throw a not found exception if the target does not exist
       throw new NotFoundException(TARGET_NOT_FOUND);
     }
 
