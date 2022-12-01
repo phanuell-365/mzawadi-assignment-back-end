@@ -140,9 +140,11 @@ export class DistributorsService {
       else distributor.email = updateDistributorDto.email;
     }
 
-    // else update the phone and return the updated distributor
-    distributor.phone = updateDistributorDto.phone;
+    if (updateDistributorDto.phone)
+      // if the phone is given update the phone
+      distributor.phone = updateDistributorDto.phone;
 
+    // return the updated distributor
     return await distributor.save();
   }
 

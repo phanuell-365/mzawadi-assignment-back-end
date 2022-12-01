@@ -5,7 +5,7 @@ import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
 import { CreateDistributorDto } from '../src/distributors/dto';
 
-describe('DMS (e2e)', () => {
+describe('Mzawadi Loyalty Assignment - Distributors Test (e2e)', () => {
   let distributorApp: INestApplication;
 
   jest.setTimeout(15000);

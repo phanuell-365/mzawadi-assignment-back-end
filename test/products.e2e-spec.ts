@@ -3,10 +3,10 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
-import { CreateConsumerDto } from '../src/consumers/dto';
+import { CreateProductDto } from '../src/products/dto';
 
-describe('Mzawadi Loyalty Assignment - Consumers Test (e2e)', () => {
-  let consumerApp: INestApplication;
+describe('Mzawadi Loyalty Assignment - Products Test (e2e)', () => {
+  let productApp: INestApplication;
 
   jest.setTimeout(15000);
 
@@ -15,21 +15,21 @@ describe('Mzawadi Loyalty Assignment - Consumers Test (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
-    consumerApp = moduleFixture.createNestApplication();
+    productApp = moduleFixture.createNestApplication();
 
-    consumerApp.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+    productApp.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-    await consumerApp.init();
+    await productApp.init();
 
-    await consumerApp.listen(process.env.TEST_PORT);
+    await productApp.listen(process.env.TEST_PORT);
     pactum.request.setBaseUrl(`http://localhost:${process.env.TEST_PORT}`);
   });
 
   afterAll(async () => {
-    await consumerApp.close();
+    await productApp.close();
   });
 
-  describe('Workflow Module', function () {
+  describe('Authentication Module', function () {
     const authDto: AuthDto = {
       username: 'Admin',
       password: 'admin',
@@ -48,38 +48,39 @@ describe('Mzawadi Loyalty Assignment - Consumers Test (e2e)', () => {
     });
   });
 
-  describe('Consumers Module', function () {
-    let consumerOneId: string;
-    describe('Create a new Consumer', function () {
-      const createConsumerDto: CreateConsumerDto = {
-        name: 'John Doe',
-        email: 'johndoe@localhost.com',
-        phone: '0749494882',
+  describe('Products Module', function () {
+    let productOneId: string;
+
+    describe('Create a new Product', function () {
+      const createProductDto: CreateProductDto = {
+        name: 'Yoghurt',
+        price: 200,
       };
-      it('should return a new consumer', async function () {
+
+      it('should return a new product', async function () {
         const res = await pactum
           .spec()
-          .post('/consumers')
-          .withBody({ ...createConsumerDto })
+          .post('/products')
+          .withBody({ ...createProductDto })
           .expectStatus(201)
           .inspect()
           .toss();
 
-        const consumer = res.body;
+        const product = res.body;
 
-        consumerOneId = consumer.id;
+        productOneId = product.id;
       });
     });
 
-    describe('Get consumer by id', function () {
-      it('should return a consumer with the given id', function () {
+    describe('Get product by id', function () {
+      it('should return a product with the given id', function () {
         return pactum
           .spec()
-          .get('/consumers/{id}')
-          .withPathParams({ id: consumerOneId })
+          .get('/products/{id}')
+          .withPathParams({ id: productOneId })
           .inspect()
           .expectStatus(200)
-          .expectJsonLike({ id: consumerOneId });
+          .expectJsonLike({ id: productOneId });
       });
     });
   });
