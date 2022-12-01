@@ -14,6 +14,7 @@ import { DISTRIBUTORS_NOT_FOUND } from '../distributors/const';
 import { ConsumersService } from '../consumers/consumers.service';
 import { CONSUMER_NOT_FOUND } from '../consumers/const';
 import { Product } from '../products/entities';
+import { RewardsService } from '../rewards/rewards.service';
 
 @Injectable()
 export class SalesService {
@@ -22,6 +23,7 @@ export class SalesService {
     private readonly distributorsService: DistributorsService,
     private readonly productsService: ProductsService,
     private readonly consumersService: ConsumersService,
+    private readonly rewardsService: RewardsService,
   ) {}
 
   async getSale(options: { saleId?: string }) {
@@ -82,9 +84,14 @@ export class SalesService {
       createSaleDto.transactionAmount = productPrice;
     }
 
-    return await this.salesRepository.create({
-      ...createSaleDto,
+    const sale = await this.salesRepository.create({
+      ...createSaleD,
     });
+
+    // reward the distributor
+    await this.rewardsService.rewardDistributor(sale);
+
+    return sale;
   }
 
   async findAll() {
