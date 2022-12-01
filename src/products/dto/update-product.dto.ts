@@ -11,4 +11,14 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   @IsNumber()
   @IsPositive()
   price?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  quantitySold?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  totalAmount?: number;
 }
