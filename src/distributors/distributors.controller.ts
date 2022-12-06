@@ -6,10 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { DistributorsService } from './distributors.service';
 import { CreateDistributorDto, UpdateDistributorDto } from './dto';
+import { JwtAuthGuard } from '../auth/guards';
 
+@UseGuards(JwtAuthGuard)
 @Controller('distributors')
 export class DistributorsController {
   constructor(private readonly distributorsService: DistributorsService) {}

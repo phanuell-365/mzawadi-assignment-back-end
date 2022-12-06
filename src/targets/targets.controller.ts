@@ -6,10 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { TargetsService } from './targets.service';
 import { CreateTargetDto, UpdateTargetDto } from './dto';
+import { JwtAuthGuard } from '../auth/guards';
 
+@UseGuards(JwtAuthGuard)
 @Controller('targets')
 export class TargetsController {
   constructor(private readonly targetsService: TargetsService) {}

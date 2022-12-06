@@ -8,10 +8,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ConsumersService } from './consumers.service';
 import { CreateConsumerDto, UpdateConsumerDto } from './dto';
+import { JwtAuthGuard } from '../auth/guards';
 
+@UseGuards(JwtAuthGuard)
 @Controller('consumers')
 export class ConsumersController {
   constructor(private readonly consumersService: ConsumersService) {}
