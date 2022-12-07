@@ -100,6 +100,12 @@ npm run start
 - To build the application for production
 
 ```bash
+npm run build
+```
+
+- To run the application in production mode
+
+```bash 
 npm run start:prod
 ```
 
