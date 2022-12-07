@@ -65,6 +65,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .spec()
           .post('/consumers')
           .withBody({ ...createConsumerDto })
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .expectStatus(201)
           .inspect()
           .stores('consumerOneId', 'id')
@@ -83,6 +84,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .get('/consumers/{id}')
           .withPathParams({ id: consumerOneId })
           .inspect()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .expectStatus(200)
           .expectJsonLike({ id: consumerOneId });
       });
@@ -99,6 +101,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
       it('should return a new product', function () {
         return pactum
           .spec()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .post('/products')
           .withBody({ ...createProductDto })
           .expectStatus(201)
@@ -114,6 +117,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .get('/products/{id}')
           .withPathParams('id', '$S{productOneId}')
           .inspect()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .expectStatus(200)
           .expectJsonLike({ id: '$S{productOneId}' });
       });
@@ -127,6 +131,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
       it('should return the newly created product', function () {
         return pactum
           .spec()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .post('/products')
           .withBody({ ...createNewProduct })
           .expectStatus(201)
@@ -146,6 +151,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
       it('should return a new distributor', function () {
         return pactum
           .spec()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .post('/distributors')
           .withBody({ ...createDistributorDto })
           .stores('distributorOneId', 'id')
@@ -161,6 +167,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .get('/distributors/{id}')
           .withPathParams('id', '$S{distributorOneId}')
           .inspect()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .expectStatus(200)
           .expectJsonLike({ id: '$S{distributorOneId}' });
       });
@@ -179,6 +186,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
         return pactum
           .spec()
           .post('/targets')
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .withBody({ ...createTargetDto })
           .inspect()
           .stores('targetOneId', 'id')
@@ -188,7 +196,12 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
 
     describe('Get all targets', function () {
       it('should return all the available targets', function () {
-        return pactum.spec().get('/targets').inspect().expectStatus(200);
+        return pactum
+          .spec()
+          .get('/targets')
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
+          .inspect()
+          .expectStatus(200);
       });
     });
   });
@@ -207,6 +220,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
       it('should return a new sale', async function () {
         const res = await pactum
           .spec()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .post('/sales')
           .withBody({ ...createSaleDto })
           .inspect()
@@ -222,7 +236,12 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
 
     describe('Get all sales', function () {
       it('should return all the available sales', function () {
-        return pactum.spec().get('/sales').inspect().expectStatus(200);
+        return pactum
+          .spec()
+          .get('/sales')
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
+          .inspect()
+          .expectStatus(200);
       });
     });
 
@@ -233,6 +252,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .get('/sales/{id}')
           .withPathParams({ id: saleOneId })
           .inspect()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .expectStatus(200);
       });
     });
@@ -248,13 +268,19 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .withBody({ ...updateSaleDto })
           .withPathParams({ id: saleOneId })
           .inspect()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .expectStatus(200);
       });
     });
 
     describe('Get all sales', function () {
       it('should return all the available sales', function () {
-        return pactum.spec().get('/sales').inspect().expectStatus(200);
+        return pactum
+          .spec()
+          .get('/sales')
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
+          .inspect()
+          .expectStatus(200);
       });
     });
 
@@ -271,6 +297,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
             .spec()
             .post('/targets')
             .withBody({ ...createTargetDto })
+            .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
             .inspect()
             .stores('targetOneId', 'id')
             .expectStatus(201);
@@ -292,6 +319,7 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
           .post('/sales')
           .withBody({ ...anotherSaleDto })
           .inspect()
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
           .stores('saleOneId', 'id')
           .expectStatus(201);
       });
@@ -299,7 +327,12 @@ describe('Mzawadi Loyalty Assignment - Sales Test (e2e)', () => {
 
     describe('Get all sales', function () {
       it('should return all the available sales', function () {
-        return pactum.spec().get('/sales').inspect().expectStatus(200);
+        return pactum
+          .spec()
+          .get('/sales')
+          .withHeaders({ Authorization: 'Bearer $S{accessToken}' })
+          .inspect()
+          .expectStatus(200);
       });
     });
   });
