@@ -158,6 +158,8 @@ export class UsersService {
 
     createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
 
+    // make the user by default an admin
+
     return await this.usersRepository.create({ ...createUserDto });
   }
 
