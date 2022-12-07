@@ -76,7 +76,7 @@ The `.env.example` file is located in the root directory of the project.
 ### Clone the repository
 
 ```bash
-git clone https://github.com/phanuell-365/mzawadi-assignment-back-end
+git clone https://github.com/phanuell-365/mzawadi-assignment-back-end.git
 ```
 
 - Enter the project directory
