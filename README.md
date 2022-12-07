@@ -73,7 +73,7 @@ The `.env.example` file is located in the root directory of the project.
 - The migrations will be run automatically when the application starts.
 - There are no seeders for this project.
 
-- Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/phanuell-365/mzawadi-assignment-back-end
